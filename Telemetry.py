@@ -3,6 +3,7 @@ from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from datetime import datetime
 
 
 def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
@@ -30,7 +31,7 @@ def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
     t2 : float
              time at t2
     """
-    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1) * 3600
+    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1).total_seconds() * 3600
 
     jouleDiff = joule2 - joule1
 
@@ -39,15 +40,16 @@ def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
 
 @dataclass
 class TelemetryDataPoint:
-    timestamp: str
+    timestamp: datetime
     speed: float
     current: float
     voltage: float
+    rpm: int
 
 
 @dataclass
 class InstantEfficiencyDataPoint:
-    timestamp: str
+    timestamp: datetime
     instant_efficiency: float
 
 
@@ -87,21 +89,6 @@ class TelemetryProcessor:
 
         return points
 
-
-#     def current_speed_voltage_v_time(self):
-#         current = self.data["jm3_current"] / 1000
-#         speed = self.data["gps_speed"]
-#         voltage = self.data["jm3_voltage"] / 1000
-#         time1 = (self.data["Time"] - self.data["Time"][self.start]) * 3600
-
-#         plt.figure(figsize=(14, 9))
-#         plt.title("Various information")
-#         plt.plot(time1, current, label="Current (A)")
-#         plt.plot(time1, speed, label="Speed (km/h)")
-#         plt.plot(time1, voltage, label="Voltage (V)")
-#         plt.xlabel("Time (s)")
-#         plt.legend()
-#         plt.show()
 
 #     def efficiency_v_speed(self, samples, start=self.start, stop=self.stop):
 #         # TODO: correct logical error since speed and efficiency don't have matching time coordinates/pairs hence

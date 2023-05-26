@@ -5,36 +5,38 @@ import numpy as np
 
 def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
     """
-Determines the instantaneous efficiency between two points in time
+    Determines the instantaneous efficiency between two points in time
 
-Parameters
-----------
+    Parameters
+    ----------
 
-joule1 : float
-         all_energy at t1
-speed1 : float
-         gps_speed at t1
-joule1 : float
-         all_energy at t1
+    joule1 : float
+             all_energy at t1
+    speed1 : float
+             gps_speed at t1
+    joule1 : float
+             all_energy at t1
 
-joule2 : float
-         all_energy at t2
-speed2 : float
-         gps_speed at t2
-joule2 : float
-         all_energy at t2
-t1 : float
-         time at t1
-t2 : float
-         time at t2
-
-"""
-    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1) * 3600
+    joule2 : float
+             all_energy at t2
+    speed2 : float
+             gps_speed at t2
+    joule2 : float
+             all_energy at t2
+    t1 : float
+             time at t1
+    t2 : float
+             time at t2
+    """
+    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1).seconds * 3600
     return distance / 1000 / ((joule2 - joule1) / 3600000)
 
+
 """
 
 """
+
+
 class SemTelemetry:
     def __init__(self, file, start, stop):
         # TODO: perhaps we can read the file to determine start and stop
@@ -68,9 +70,15 @@ class SemTelemetry:
         inst_eff = []
         while i < stop:
             inst_eff.append(
-                inst_efficiency(self.data["all_energy"][i - samples], self.data["gps_speed"][i - samples],
-                                self.data["all_energy"][i], self.data["gps_speed"][i], self.data["Time"][i - samples],
-                                self.data["Time"][i]))
+                inst_efficiency(
+                    self.data["all_energy"][i - samples],
+                    self.data["gps_speed"][i - samples],
+                    self.data["all_energy"][i],
+                    self.data["gps_speed"][i],
+                    self.data["Time"][i - samples],
+                    self.data["Time"][i],
+                )
+            )
             time.append((self.data["Time"][i - samples / 2] - timeRef) * 3600)
             i += 1
         print("Overall", np.average(inst_eff))
@@ -78,7 +86,7 @@ class SemTelemetry:
         return time, inst_eff
 
     def eff_speed_current_v_time(self, samples, start=self.start, stop=self.stop):
-        current = self.data['jm3_current'] / 1000
+        current = self.data["jm3_current"] / 1000
         time1 = (self.data["Time"] - self.data["Time"][start]) * 3600
         speed = self.data["gps_speed"]
         time, inst_eff = self.get_inst_efficiency(samples, start, stop)
@@ -91,7 +99,13 @@ class SemTelemetry:
         plt.ylabel("Instantaneous Efficiency (km/kWh)")
         plt.ylim([0, 120])
         # plt.xlim([0,1000])
-        plt.plot(time[0:len(time)], inst_eff[0:len(inst_eff)], "-o", markersize=2, label="Efficiency (km/kWh)")
+        plt.plot(
+            time[0 : len(time)],
+            inst_eff[0 : len(inst_eff)],
+            "-o",
+            markersize=2,
+            label="Efficiency (km/kWh)",
+        )
         plt.legend()
         plt.show()
 
@@ -120,13 +134,15 @@ class SemTelemetry:
         plt.xlabel("Speed")
         plt.ylabel("Efficiency")
         plt.ylim([0, 100])
-        plt.plot(speed[0:7319 - 2535], inst_eff[0:7319 - 2535], "o", markersize=2)  # TODO: bounds from where?
+        plt.plot(
+            speed[0 : 7319 - 2535], inst_eff[0 : 7319 - 2535], "o", markersize=2
+        )  # TODO: bounds from where?
         plt.title("Efficiency vs speed")
         plt.show()
         return
 
     def current_v_speed(self):
-        current = self.data['jm3_current'] / 1000
+        current = self.data["jm3_current"] / 1000
         speed = self.data["gps_speed"]
 
         plt.plot(speed[0:1149], current[0:1149], "o", markersize=2)
