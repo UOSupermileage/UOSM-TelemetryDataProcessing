@@ -1,0 +1,12 @@
+{'Items': [{'clockState': {'N': '0'},
+   'lastDeadman': {'S': '00.26.47\n'},
+   'throttleTooHigh': {'N': '0'},
+   'throttle': {'N': '0'},
+   'current': {'N': '1474'},
+   'motorInitializing': {'N': '0'},
+   'timestamp': {'S': '2023-05-25 21:07:19.861'},
+   'speed': {'N': '919'},
+   'rpm': {'N': '0'},
+   'test_id': {'S': 'dev-pi2'},
+   'voltage': {'N': '541'}
+   }]}
