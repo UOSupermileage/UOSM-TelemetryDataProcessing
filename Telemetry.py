@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime
 
 
-def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
+def inst_efficiency(power1, speed1, power2, speed2, t1, t2):
     """
     Determines the instantaneous efficiency between two points in time
 
@@ -31,9 +31,11 @@ def inst_efficiency(joule1, speed1, joule2, speed2, t1, t2):
     t2 : float
              time at t2
     """
-    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1).total_seconds() * 3600
+    distance = ((speed1 + speed2) / 3.6 / 2) * (t2 - t1).total_seconds()
+    
+    power_average = (power1 + power2)/2
 
-    jouleDiff = joule2 - joule1
+    jouleDiff = power_average*(t2-t1).total_seconds()
 
     return distance / 1000 / ((jouleDiff if jouleDiff != 0 else -1) / 3600000)
 
