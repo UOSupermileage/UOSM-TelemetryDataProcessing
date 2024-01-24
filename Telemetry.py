@@ -45,6 +45,10 @@ class TelemetryDataPoint:
     current: float
     voltage: float
     rpm: int
+    acceleration: tuple
+    gps : str
+    throttle : float
+    motorOn : str
 
 
 @dataclass
